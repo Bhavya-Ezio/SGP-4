@@ -62,21 +62,21 @@ const Navbar = () => {
     return (
         <nav className="w-full bg-gray-800 p-4">
             <div className="flex justify-between items-center">
-                <h1 className="text-white text-2xl">TranscribeGuj</h1>
+                <h1 className="text-white text-4xl font-bold">TranscribeGuj</h1>
                 <div>
                     {isLoggedIn ? (
                         <div className="flex items-center">
-                            <span className="text-white mr-4">Welcome, {userName}!</span> {/* Show user's name if logged in */}
-                            <button className="text-white bg-red-600 hover:bg-red-700 font-bold py-2 px-4 rounded" onClick={handleLogout}>
+                            <span className="text-white mr-4 text-2xl font-bold">Welcome, {userName}!</span> {/* Show user's name if logged in */}
+                            <button className="text-white bg-red-600 hover:bg-red-700 font-bold py-3 px-6 text-lg rounded" onClick={handleLogout}>
                                 Logout
                             </button>
                         </div>
                     ) : (
                         <>
-                            <button className="text-white bg-blue-600 hover:bg-blue-700 font-bold py-2 px-4 rounded mr-2" onClick={handleLogin}>
+                            <button className="text-white bg-blue-600 hover:bg-blue-700 font-bold py-3 px-6 text-lg rounded mr-2" onClick={handleLogin}>
                                 Login
                             </button>
-                            <button className="text-white bg-blue-600 hover:bg-blue-700 font-bold py-2 px-4 rounded" onClick={handleSignup}>
+                            <button className="text-white bg-blue-600 hover:bg-blue-700 font-bold py-3 px-6 text-lg rounded" onClick={handleSignup}>
                                 Sign Up
                             </button>
                         </>

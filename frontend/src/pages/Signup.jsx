@@ -11,6 +11,15 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
+        const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+        if (password.length <= 8) {
+            toast.error("Password must be greater than 8 characters.");
+            return;
+        }
+        if (!isValidEmail(email)) {
+            toast.error("Invalid email format.");
+            return;
+        }
         const formData = { email: email, name: name, password: password };
 
         try {

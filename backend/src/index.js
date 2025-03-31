@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import userRoutes from "./routes/userRoutes.js";
+import audioRoutes from "./routes/audioRoutes.js";
+import './MQ/workers.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +18,7 @@ app.use(express.json());
 
 // Basic Routes
 app.use("/user", userRoutes);
+app.use("/audio", audioRoutes);
 
 // Start the server
 mongoose.connect(process.env.MONGODB_URI);

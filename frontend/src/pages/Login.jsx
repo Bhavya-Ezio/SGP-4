@@ -30,7 +30,7 @@ const Login = () => {
             } else {
                 localStorage.setItem("accessToken", response.data.accessToken);
                 setIsLoggedIn(true);
-                navigate("/");
+                navigate(-1);
             }
         } catch (error) {
             console.error(error);

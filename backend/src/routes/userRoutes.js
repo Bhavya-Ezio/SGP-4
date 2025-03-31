@@ -1,11 +1,10 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import user from "../schema/userSchema.js";
+import user from "../schema/user.schema.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import { StatusCodes } from "http-status-codes";
 import authenticateToken from "../middleware/authMiddleware.js";
-import userSchema from "../schema/userSchema.js";
 const router = express.Router();
 router.use(express.json());
 router.use(cookieParser());
@@ -22,24 +21,23 @@ router.post("/login", async (req, res) => {
                 })
                 .status(StatusCodes.UNAUTHORIZED);
         }
-        // else if (!u.verified) {
-        //     return res
-        //         .json({
-        //             message: "Email is not verified",
-        //             success: false,
-        //         })
-        //         .status(StatusCodes.UNAUTHORIZED);
-        // }
         else if (await bcrypt.compare(body.password, u.password)) {
             const id = { id: u._id };
-            // console.log(email);
             const accessToken = jwt.sign(id, process.env.ACCESS_TOKEN_SECRET);
-            res.cookie("accessToken", accessToken);
+            
+            // Set cookie with proper options for persistence
+            res.cookie("accessToken", accessToken, {
+                httpOnly: true,
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
+            });
+
             return res
                 .json({
                     message: "Authentication Successful",
                     success: true,
                     accessToken: accessToken,
+                    userName: u.name // Add userName to response
                 })
                 .status(StatusCodes.ACCEPTED);
         } else {
@@ -74,7 +72,6 @@ router.post("/signup", async (req, res) => {
             lastModified: Date.now(),
         });
         await u.save();
-        // let response = await sendVerificationEmail(u, res);
         return res
             .json({
                 message: `User Created Successfully`,
@@ -112,12 +109,12 @@ router.post("/signup", async (req, res) => {
 });
 
 router.get("/checkAuth", authenticateToken, async (req, res) => {
-    const user = await userSchema.findById(req.user.id);
+    const users = await user.findById(req.user.id);
     return res
         .json({
             message: "Authenticated successfully",
             success: true,
-            userName: user.name,
+            userName: users.name,
         })
         .status(StatusCodes.OK);
 });
